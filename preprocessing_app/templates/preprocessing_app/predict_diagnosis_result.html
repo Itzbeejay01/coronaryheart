@@ -1,0 +1,247 @@
+{% extends 'preprocessing_app/base.html' %}
+{% load static %}
+
+{% block title %}Diagnosis Report · ArteriAI{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
+    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/50 max-w-4xl w-full" id="reportContent">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Diagnosis result</h1>
+            <p class="text-gray-600">Ensemble AI analysis report</p>
+        </div>
+
+        {% if predictions %}
+            {% with ensemble=predictions.ensemble %}
+            <!-- Ensemble Result -->
+            <div class="text-center mb-8">
+                <!-- Result Badge -->
+                <div class="inline-flex items-center px-6 py-3 rounded-full text-lg font-bold mb-4 
+                    {% if ensemble.prediction|lower == 'malignant' %}
+                        bg-gradient-to-r from-red-400 to-yellow-400 text-red-900
+                    {% else %}
+                        bg-gradient-to-r from-green-400 to-emerald-400 text-green-900
+                    {% endif %}">
+                    {{ ensemble.prediction }}
+                </div>
+                
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Final ensemble decision</h2>
+                
+                <!-- Confidence Meter -->
+                <div class="max-w-md mx-auto mb-2">
+                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2 relative">
+                        <div 
+                            class="h-4 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
+                            style="width: {{ ensemble.confidence|floatformat:2 }}%"
+                        ></div>
+                    </div>
+                    <div class="text-sm font-medium text-gray-700">
+                        {{ ensemble.confidence|floatformat:1 }}% confidence
+                    </div>
+                </div>
+                
+                <p class="text-gray-600">
+                    Weighted probability: {{ ensemble.probability|floatformat:2 }}%
+                </p>
+            </div>
+            {% endwith %}
+
+            <!-- Votes Display -->
+            <div class="flex justify-center space-x-8 mb-8">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-teal-500">{{ predictions.ensemble.votes.benign_votes }}</div>
+                    <div class="text-sm text-gray-500 mt-1">Benign votes</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-pink-500">{{ predictions.ensemble.votes.malignant_votes }}</div>
+                    <div class="text-sm text-gray-500 mt-1">Malignant votes</div>
+                </div>
+            </div>
+
+            <!-- Model Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                {% with predictions.vgg16 as model %}
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
+                    <div class="text-3xl mb-3" aria-hidden="true">🧠</div>
+                    <h3 class="font-semibold text-gray-900 mb-2">VGG16</h3>
+                    <div class="text-lg font-bold mb-3 
+                        {% if model.prediction|lower == 'benign' %}
+                            text-teal-500
+                        {% else %}
+                            text-pink-500
+                        {% endif %}">
+                        {{ model.prediction }}
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div 
+                            class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
+                            style="width: {{ model.confidence|floatformat:2 }}%"
+                        ></div>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Probability: {{ model.probability|floatformat:1 }}%
+                    </p>
+                </div>
+                {% endwith %}
+
+                {% with predictions.resnet50 as model %}
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
+                    <div class="text-3xl mb-3" aria-hidden="true">⚡</div>
+                    <h3 class="font-semibold text-gray-900 mb-2">ResNet50</h3>
+                    <div class="text-lg font-bold mb-3 
+                        {% if model.prediction|lower == 'benign' %}
+                            text-teal-500
+                        {% else %}
+                            text-pink-500
+                        {% endif %}">
+                        {{ model.prediction }}
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div 
+                            class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
+                            style="width: {{ model.confidence|floatformat:2 }}%"
+                        ></div>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Probability: {{ model.probability|floatformat:1 }}%
+                    </p>
+                </div>
+                {% endwith %}
+
+                {% with predictions.efficientnet as model %}
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
+                    <div class="text-3xl mb-3" aria-hidden="true">🚀</div>
+                    <h3 class="font-semibold text-gray-900 mb-2">EfficientNet</h3>
+                    <div class="text-lg font-bold mb-3 
+                        {% if model.prediction|lower == 'benign' %}
+                            text-teal-500
+                        {% else %}
+                            text-pink-500
+                        {% endif %}">
+                        {{ model.prediction }}
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div 
+                            class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
+                            style="width: {{ model.confidence|floatformat:2 }}%"
+                        ></div>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        Probability: {{ model.probability|floatformat:1 }}%
+                    </p>
+                </div>
+                {% endwith %}
+            </div>
+
+            <!-- Timestamp -->
+            <div class="text-center text-gray-600 mb-8">
+                <p>
+                    Analysis completed: {{ predictions.timestamp|date:"F j, Y, g:i A" }}<br>
+                    Image evaluated: {{ predictions.image_name }}
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <button 
+                    type="button" 
+                    onclick="saveReport()" 
+                    class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                >
+                    <span class="mr-2" aria-hidden="true">💾</span>
+                    Save report
+                </button>
+                <button 
+                    type="button" 
+                    onclick="printReport()" 
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                >
+                    <span class="mr-2" aria-hidden="true">🖨️</span>
+                    Print report
+                </button>
+                <a 
+                    href="{% url 'predict_diagnosis' %}" 
+                    class="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors text-center"
+                >
+                    <span class="mr-2" aria-hidden="true">🔄</span>
+                    New analysis
+                </a>
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-12 px-4">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">No prediction data</h2>
+                <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                    We couldn't find stored predictions. Launch a new analysis to generate a report.
+                </p>
+                <a 
+                    href="{% url 'predict_diagnosis' %}" 
+                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                >
+                    Return to predictor
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    function saveReport() {
+        printReport();
+    }
+
+    function printReport() {
+        const reportContent = document.getElementById('reportContent');
+        if (!reportContent) {
+            return;
+        }
+
+        const printWindow = window.open('', '_blank');
+        const styles = `
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+                body { 
+                    font-family: 'Inter', sans-serif; 
+                    padding: 2rem;
+                    background: white;
+                }
+                @media print {
+                    .no-print { display: none !important; }
+                    .bg-gradient-to-br { background: white !important; }
+                    .backdrop-blur-lg { backdrop-filter: none !important; }
+                    .shadow-lg { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1) !important; }
+                    .border-white { border-color: #e5e7eb !important; }
+                }
+                .bg-gradient-to-r { background-image: none !important; }
+                .from-blue-600 { background-color: #2563eb !important; }
+                .to-pink-500 { background-color: #ec4899 !important; }
+            </style>
+        `;
+
+        // Clone the content and hide action buttons for print
+        const contentClone = reportContent.cloneNode(true);
+        const actionButtons = contentClone.querySelectorAll('button, a[href*="predict_diagnosis"]');
+        actionButtons.forEach(btn => {
+            btn.classList.add('no-print');
+        });
+
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>ArteriAI Diagnosis Report</title>
+                    ${styles}
+                </head>
+                <body>
+                    ${contentClone.innerHTML}
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+
+        setTimeout(() => {
+            printWindow.print();
+        }, 400);
+    }
+</script>
+{% endblock %}

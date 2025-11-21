@@ -1,0 +1,132 @@
+# ArteriAI - Coronary Heart Disease Detection System
+
+## Overview
+ArteriAI is a web-based application for the detection and analysis of coronary heart disease from medical images. It combines deep learning models, feature extraction, and a Django-powered web interface to deliver accurate predictions and risk assessments.
+
+---
+
+## 1. Project Structure & Technology
+- **Backend:** Django 4.2, Python 3.8+
+- **Frontend:** HTML5, CSS3, JavaScript, Tailwind CSS
+- **ML Frameworks:** TensorFlow 2.9+, scikit-learn
+- **Image Processing:** OpenCV, scikit-image, Pillow
+- **Database:** SQLite (dev), PostgreSQL (prod)
+- **Medical Imaging:** PyDICOM
+
+### Main Folders:
+- `arteriai/`: Django project settings
+- `preprocessing_app/`: Main Django app (models, views, forms, templates, adversarial defense, symptom checker)
+- `model_training/`: Model training scripts (VGG16, ResNet50, EfficientNet, ensemble evaluation, feature extraction, recall/sensitivity analysis)
+- `models/`: Trained model files (.keras)
+- `data/`: Datasets and splits
+- `processing_scripts/`: Image processing utilities
+- `extracted_features_direct/`: Feature extraction results
+- `recall_sensitivity_results/`: Recall/sensitivity analysis results
+- `ensemble_results/`: Model evaluation results
+- `staticfiles/`: Static assets
+
+---
+
+## 2. Installation & Setup
+1. **Clone the repository**
+   ```bash
+git clone <repository-url>
+cd CoronaryHeart
+```
+2. **Create and activate virtual environment**
+   ```bash
+python -m venv venv
+source venv/bin/activate
+```
+3. **Install Python dependencies**
+   ```bash
+pip install -r requirements.txt
+```
+4. **Install Node.js dependencies (for Tailwind CSS)**
+   ```bash
+npm install
+```
+5. **Run database migrations**
+   ```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+6. **Run the development server**
+   ```bash
+python manage.py runserver
+```
+
+---
+
+## 3. Data Processing Pipeline
+- **Image Cropping (`crop_image.py`)**: Extracts regions of interest (stenosis) with context margin, resizes to 224x224, balances dataset.
+- **Dataset Splitting (`dataset_split.py`)**: Splits images into train/val/test, maintains class balance.
+
+---
+
+## 4. Model Training Pipeline
+- **VGG16 (`train_vgg16.py`)**: Transfer learning for coronary heart disease detection.
+- **ResNet50 (`train_resnet50.py`)**: Custom architecture for robust classification.
+- **EfficientNet (`train_efficientnet.py`)**: Optimized for medical images.
+- **Ensemble Evaluation (`hard_ensemble_evaluate.py`)**: Combines predictions from all three models using hard voting, calculates metrics (accuracy, precision, recall, specificity, F1, ROC-AUC), saves confusion matrices and ROC curves.
+
+---
+
+## 5. Feature Extraction System
+- **Direct Feature Extraction (`direct_feature_extraction.py`)**: Extracts geometric, texture, intensity, HOG, and edge features from images. Results saved in `extracted_features_direct/`.
+
+---
+
+## 6. Recall Sensitivity Analysis
+- **Recall/Sensitivity Analysis (`recall_sensitivity_analysis.py`)**: Tests model robustness to threshold, noise, blur, and brightness. Results saved in `recall_sensitivity_results/`.
+
+---
+
+## 8. Running Scripts
+- **Feature Extraction:**
+  ```bash
+  python run_direct_feature_extraction.py
+  ```
+- **Recall Analysis:**
+  ```bash
+  python run_recall_analysis.py
+  ```
+- **Ensemble Evaluation:**
+  ```bash
+  cd model_training
+  python hard_ensemble_evaluate.py
+  ```
+- **Train Models:**
+  ```bash
+  cd model_training
+  python train_vgg16.py
+  python train_resnet50.py
+  python train_efficientnet.py
+  ```
+- **Web App:**
+  ```bash
+  python manage.py runserver
+  ```
+  Visit `http://localhost:8000` for the interface.
+
+---
+
+## 9. Results & Analysis
+- **Model metrics, confusion matrices, and ROC curves** are saved in `ensemble_results/`.
+- **Feature extraction results** in `extracted_features_direct/`.
+- **Recall/sensitivity analysis** in `recall_sensitivity_results/`.
+
+---
+
+## 10. Requirements
+See `requirements.txt` for all dependencies (Django, TensorFlow, scikit-learn, OpenCV, etc).
+
+---
+
+## 11. Notes
+- For research/educational use only. Not a substitute for professional medical advice.
+- For support, open an issue or contact the dev team.
+
+---
+
+This document summarizes every step and component of the ArteriAI project, from setup to advanced analysis and web deployment.

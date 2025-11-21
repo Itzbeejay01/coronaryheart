@@ -1,0 +1,187 @@
+{% extends 'preprocessing_app/base.html' %}
+{% load static %}
+
+{% block title %}Processing Results · ArteriAI{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-br from-slate-200 via-blue-300/20 to-indigo-300/10 py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Background Elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-r from-emerald-400/5 to-cyan-400/5 rounded-full blur-2xl"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Compact Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-700 border border-green-200 mb-4">
+                <span class="mr-1">✨</span>
+                Processing Complete
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Processing Results</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto text-sm">
+                {% if total_images > 1 %} 
+                    {{ total_images }} images processed with enhanced quality
+                {% else %} 
+                    Analysis complete with enhanced image quality
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Compact Images Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-8">
+            {% for image in processed_images %}
+            <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-white/50 transform transition-all duration-200 hover:shadow-xl hover:scale-[1.02] overflow-hidden group">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-semibold text-sm truncate">Image {{ forloop.counter }}</h3>
+                        <span class="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                            {{ image.original_dimensions }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Image Comparison -->
+                <div class="p-4">
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <!-- Original Image -->
+                        <div class="text-center">
+                            <div class="relative rounded-xl overflow-hidden bg-gray-100 aspect-square mb-2">
+                                <img 
+                                    src="{{ image.original_image }}" 
+                                    alt="Original" 
+                                    class="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div class="flex items-center justify-center space-x-1 text-xs text-gray-500">
+                                <div class="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                                <span>Original</span>
+                            </div>
+                        </div>
+
+                        <!-- Processed Image -->
+                        <div class="text-center">
+                            <div class="relative rounded-xl overflow-hidden bg-gradient-to-br from-blue-50 to-purple-50 aspect-square mb-2 border border-blue-200/50">
+                                {% if image.processed_image %}
+                                <img 
+                                    src="{{ image.processed_image }}" 
+                                    alt="Enhanced" 
+                                    class="w-full h-full object-cover"
+                                />
+                                {% else %}
+                                <div class="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400">
+                                    <span class="text-xs font-medium">Incomplete</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center justify-center space-x-1 text-xs text-blue-600">
+                                <div class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                                <span>Enhanced</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compact Quality Metrics -->
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-gray-900 text-sm flex items-center">
+                            <svg class="w-3 h-3 mr-1.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Quality Metrics
+                        </h4>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-blue-50 rounded-lg p-2 border border-blue-200/50">
+                                <div class="text-xs text-blue-600 font-medium">PSNR</div>
+                                <div class="text-sm font-bold text-gray-900">{{ image.psnr|floatformat:1 }}</div>
+                            </div>
+                            
+                            <div class="bg-green-50 rounded-lg p-2 border border-green-200/50">
+                                <div class="text-xs text-green-600 font-medium">SSIM</div>
+                                <div class="text-sm font-bold text-gray-900">{{ image.ssim|floatformat:3 }}</div>
+                            </div>
+                            
+                            <div class="bg-purple-50 rounded-lg p-2 border border-purple-200/50">
+                                <div class="text-xs text-purple-600 font-medium">MSE</div>
+                                <div class="text-sm font-bold text-gray-900">{{ image.mse|floatformat:3 }}</div>
+                            </div>
+                            
+                            <div class="bg-orange-50 rounded-lg p-2 border border-orange-200/50">
+                                <div class="text-xs text-orange-600 font-medium">UQI</div>
+                                <div class="text-sm font-bold text-gray-900">{{ image.uqi|floatformat:3 }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compact Processing Steps -->
+                    <div class="mt-4 pt-3 border-t border-gray-200/50">
+                        <h4 class="font-semibold text-gray-900 text-sm mb-2 flex items-center">
+                            <svg class="w-3 h-3 mr-1.5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            Processing Steps
+                        </h4>
+                        <div class="space-y-1">
+                            {% for step in image.processing_steps %}
+                            <div class="flex items-center space-x-2 p-1.5 rounded-lg bg-gray-50/50 text-xs text-gray-700">
+                                <div class="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <span class="truncate">{{ step }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Compact Action Buttons -->
+        <div class="flex flex-col sm:flex-row justify-center gap-3 mb-6">
+            <a 
+                href="{% url 'upload' %}" 
+                class="group inline-flex items-center justify-center px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-xl shadow hover:shadow-md transform hover:scale-105 transition-all duration-200 text-sm"
+            >
+                <span class="mr-2">🔄</span>
+                Process More
+            </a>
+            <a 
+                href="{% url 'index' %}" 
+                class="group inline-flex items-center justify-center px-6 py-2.5 bg-white text-gray-700 font-medium rounded-xl border border-gray-300 shadow hover:shadow-md hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 text-sm"
+            >
+                <span class="mr-2">🏠</span>
+                Return Home
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .image-card {
+        animation: fade-in-up 0.4s ease-out;
+        animation-fill-mode: both;
+    }
+    
+    .image-card:nth-child(1) { animation-delay: 0.1s; }
+    .image-card:nth-child(2) { animation-delay: 0.15s; }
+    .image-card:nth-child(3) { animation-delay: 0.2s; }
+    .image-card:nth-child(4) { animation-delay: 0.25s; }
+    .image-card:nth-child(5) { animation-delay: 0.3s; }
+    .image-card:nth-child(6) { animation-delay: 0.35s; }
+</style>
+{% endblock %}

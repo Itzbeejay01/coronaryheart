@@ -1,0 +1,46 @@
+{% extends 'preprocessing_app/base.html' %}
+
+{% block title %}Welcome to ArteriAI{% endblock %}
+
+{% block content %}
+<section class="section" style="display:flex;justify-content:center;">
+    <div class="glass-card" style="max-width:820px;text-align:center;">
+        <img src="{% static 'preprocessing_app/images/@IBLogo.png' %}" alt="ArteriAI logo" width="96" height="96" style="margin:0 auto 1.5rem;">
+        <h1 class="section-title hero-gradient" style="font-size:2.8rem;margin-bottom:0.5rem;">Welcome to ArteriAI</h1>
+        <p class="muted-copy" style="font-size:1.05rem;margin-bottom:2rem;">
+            Advanced, AI-powered coronary disease detection that combines high-fidelity preprocessing with ensemble deep learning.
+            Streamline your imaging workflow from raw upload to actionable insight.
+        </p>
+
+        <div class="feature-grid" style="margin-top:0;">
+            <div class="feature-card glass-card--compact">
+                <div class="feature-icon">🩺</div>
+                <h3 class="feature-title">Clinical precision</h3>
+                <p class="muted-copy">
+                    Proven preprocessing routines that enhance vessel clarity while preserving subtle pathology signals.
+                </p>
+            </div>
+            <div class="feature-card glass-card--compact">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Rapid inference</h3>
+                <p class="muted-copy">
+                    Run full ensemble predictions in seconds with real-time confidence tracking and explainable metrics.
+                </p>
+            </div>
+        </div>
+
+        <p class="muted-copy" style="margin:2rem 0 1.25rem;font-size:0.9rem;">
+            By entering, you acknowledge this is a medical imaging analysis tool intended for professional use.
+        </p>
+
+        <div class="hero-actions" style="justify-content:center;">
+            <a href="{% url 'index' %}" class="btn" style="padding:0.85rem 2.75rem;">
+                Enter application
+            </a>
+            <a href="{% url 'upload' %}" class="btn-secondary" style="padding:0.85rem 2.75rem;">
+                Start uploading
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

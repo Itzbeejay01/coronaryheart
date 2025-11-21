@@ -1,0 +1,222 @@
+{% extends 'preprocessing_app/base.html' %}
+{% load static %}
+
+{# ---- PAGE TITLE ---- #}
+{% block title %}ArteriAI · Coronary Imaging Intelligence{% endblock %}
+
+{# ---- MAIN CONTENT ---- #}
+{% block content %}
+<section
+  class="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 xl:gap-20"
+>
+  <div class="text-center lg:text-left">
+    <span
+      class="inline-flex items-center gap-2 rounded-full bg-indigo-100 px-4 py-2 text-sm font-semibold text-indigo-700"
+    >
+      <span aria-hidden="true">✨</span>
+      Clinical‑grade imaging assistant
+    </span>
+    <h1
+      class="mt-6 text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl"
+    >
+      <span
+        class="bg-gradient-to-r from-indigo-500 to-pink-500 bg-clip-text text-transparent"
+        >ArteriAI</span
+      >
+    </h1>
+    <p class="mt-4 text-lg text-gray-600">
+      Transform raw coronary imaging into actionable insight. ArteriAI blends
+      advanced preprocessing, adversarially trained deep networks, and ensemble
+      diagnostics to surface early indicators of heart disease.
+    </p>
+    <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
+      <a
+        href="{% url 'upload' %}"
+        class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-pink-500 px-6 py-3 text-base font-medium text-white shadow-md transition-transform hover:scale-105"
+      >
+        Start Analysis
+        <span class="ml-2" aria-hidden="true">→</span>
+      </a>
+      <a
+        href="{% url 'predict_diagnosis' %}"
+        class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-3 text-base font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
+      >
+        Review Predictions
+      </a>
+    </div>
+
+    <div
+      class="mt-10 grid grid-cols-3 gap-4 divide-x divide-gray-200 text-center"
+    >
+      <div class="px-4">
+        <div class="text-3xl font-bold text-gray-900">14k+</div>
+        <div class="mt-1 text-sm text-gray-500">Images processed</div>
+      </div>
+      <div class="px-4">
+        <div class="text-3xl font-bold text-gray-900">92%</div>
+        <div class="mt-1 text-sm text-gray-500">Ensemble accuracy</div>
+      </div>
+      <div class="px-4">
+        <div class="text-3xl font-bold text-gray-900">4x</div>
+        <div class="mt-1 text-sm text-gray-500">SNR improvement</div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="rounded-xl bg-white/60 p-8 shadow-xl ring-1 ring-black/5 backdrop-blur-lg"
+  >
+    <h2 class="text-2xl font-bold text-gray-900">
+      All‑in‑one coronary imaging workflow
+    </h2>
+    <p class="mt-2 text-gray-600">
+      Upload DICOM or JPEG studies, apply automated cleaning, and run
+      adversarially robust ensemble prediction—without leaving the browser.
+    </p>
+
+    <div class="mt-6 space-y-6">
+      <div
+        class="flex items-start gap-4 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5"
+      >
+        <div
+          class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-2xl"
+        >
+          🧠
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900">Robust preprocessing</h3>
+          <p class="mt-1 text-sm text-gray-600">
+            Non‑local means, CLAHE, and adaptive sharpening designed
+            specifically for coronary angiography datasets.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="flex items-start gap-4 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5"
+      >
+        <div
+          class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-2xl"
+        >
+          🔐
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900">Adversarial resilience</h3>
+          <p class="mt-1 text-sm text-gray-600">
+            Defense layers help maintain diagnostic signal even under common
+            perturbations and compression artifacts.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="flex items-start gap-4 rounded-lg bg-white p-4 shadow-sm ring-1 ring-black/5"
+      >
+        <div
+          class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-2xl"
+        >
+          📊
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900">Explainable metrics</h3>
+          <p class="mt-1 text-sm text-gray-600">
+            Track PSNR, SSIM, and UQI improvements alongside per‑model
+            confidence to support clinical review.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="my-20 h-px w-full bg-gray-200"></div>
+
+<section>
+  <div class="text-center">
+    <h2 class="text-3xl font-extrabold tracking-tight text-gray-900">
+      Built for radiology teams and researchers
+    </h2>
+    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+      Whether you are validating a new dataset or triaging urgent cases,
+      ArteriAI keeps the workflow consistent, auditable, and fast.
+    </p>
+  </div>
+
+  <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+    <div
+      class="rounded-xl bg-white/60 p-8 shadow-xl ring-1 ring-black/5 backdrop-blur-lg"
+    >
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl"
+      >
+        ⚡
+      </div>
+      <h3 class="mt-6 text-xl font-bold text-gray-900">Batch automation</h3>
+      <p class="mt-2 text-gray-600">
+        Drag‑and‑drop entire studies. Background workers process each image
+        asynchronously with live progress tracking and resumable batches.
+      </p>
+    </div>
+
+    <div
+      class="rounded-xl bg-white/60 p-8 shadow-xl ring-1 ring-black/5 backdrop-blur-lg"
+    >
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl"
+      >
+        🩺
+      </div>
+      <h3 class="mt-6 text-xl font-bold text-gray-900">Clinical context</h3>
+      <p class="mt-2 text-gray-600">
+        Integrate structured metadata, visualize original vs enhanced scans
+        side‑by‑side, and capture downstream predictions in one report.
+      </p>
+    </div>
+
+    <div
+      class="rounded-xl bg-white/60 p-8 shadow-xl ring-1 ring-black/5 backdrop-blur-lg"
+    >
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-2xl"
+      >
+        🛡️
+      </div>
+      <h3 class="mt-6 text-xl font-bold text-gray-900">Audit ready</h3>
+      <p class="mt-2 text-gray-600">
+        Every enhancement step is logged with reproducible configuration,
+        ensuring transparency for QA teams and regulatory review.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="mt-20">
+  <div
+    class="rounded-xl bg-white/60 p-12 text-center shadow-xl ring-1 ring-black/5 backdrop-blur-lg"
+  >
+    <h2 class="text-3xl font-extrabold text-gray-900">
+      Ready to accelerate coronary diagnostics?
+    </h2>
+    <p class="mt-4 mx-auto max-w-xl text-gray-600">
+      Upload your first study or explore past predictions. ArteriAI meets you
+      where your clinical workflow starts.
+    </p>
+
+    <div
+      class="mt-8 flex flex-col gap-4 sm:flex-row sm:justify-center"
+    >
+      <a
+        href="{% url 'upload' %}"
+        class="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-pink-500 px-6 py-3 text-base font-medium text-white shadow-md transition-transform hover:scale-105"
+        >Launch Image Pipeline</a
+      >
+      <a
+        href="{% url 'predict_diagnosis' %}"
+        class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-3 text-base font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
+      >
+        View Ensemble Reports
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

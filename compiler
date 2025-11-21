@@ -1,0 +1,10 @@
+npx @tailwindcss/cli -i ./preprocessing_app/static/src/input.css -o ./preprocessing_app/static/src/output.css --watch
+
+tree -a -I '.venv|venv|node_modules'
+
+saving it to file
+
+  tree -a -I '.venv|venv|node_modules' > folder_structure.txt
+
+
+  python3 preprocessing_app/adversarial_defense/example.py
