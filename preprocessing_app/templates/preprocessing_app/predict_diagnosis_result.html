@@ -8,7 +8,7 @@
     <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/50 max-w-4xl w-full" id="reportContent">
         <!-- Header Section -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Diagnosis result</h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Severity assessment</h1>
             <p class="text-gray-600">Ensemble AI analysis report</p>
         </div>
 
@@ -18,15 +18,17 @@
             <div class="text-center mb-8">
                 <!-- Result Badge -->
                 <div class="inline-flex items-center px-6 py-3 rounded-full text-lg font-bold mb-4 
-                    {% if ensemble.prediction|lower == 'malignant' %}
-                        bg-gradient-to-r from-red-400 to-yellow-400 text-red-900
+                    {% if ensemble.severity_level == 'high' %}
+                        bg-gradient-to-r from-rose-500 to-orange-400 text-rose-950
+                    {% elif ensemble.severity_level == 'moderate' %}
+                        bg-gradient-to-r from-amber-300 to-yellow-400 text-amber-900
                     {% else %}
-                        bg-gradient-to-r from-green-400 to-emerald-400 text-green-900
+                        bg-gradient-to-r from-emerald-300 to-teal-400 text-emerald-900
                     {% endif %}">
                     {{ ensemble.prediction }}
                 </div>
                 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Final ensemble decision</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Final ensemble severity</h2>
                 
                 <!-- Confidence Meter -->
                 <div class="max-w-md mx-auto mb-2">
@@ -42,20 +44,24 @@
                 </div>
                 
                 <p class="text-gray-600">
-                    Weighted probability: {{ ensemble.probability|floatformat:2 }}%
+                    Weighted risk score: {{ ensemble.probability|floatformat:2 }}%
                 </p>
             </div>
             {% endwith %}
 
-            <!-- Votes Display -->
-            <div class="flex justify-center space-x-8 mb-8">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-teal-500">{{ predictions.ensemble.votes.benign_votes }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Benign votes</div>
+            <!-- Severity Vote Display -->
+            <div class="flex flex-col md:flex-row justify-center gap-6 mb-8">
+                <div class="text-center px-6 py-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                    <div class="text-3xl font-bold text-emerald-500">{{ predictions.ensemble.votes.low }}</div>
+                    <div class="text-sm text-gray-500 mt-1">Low severity votes</div>
                 </div>
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-pink-500">{{ predictions.ensemble.votes.malignant_votes }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Malignant votes</div>
+                <div class="text-center px-6 py-4 bg-amber-50 rounded-2xl border border-amber-100">
+                    <div class="text-3xl font-bold text-amber-500">{{ predictions.ensemble.votes.moderate }}</div>
+                    <div class="text-sm text-gray-500 mt-1">Moderate severity votes</div>
+                </div>
+                <div class="text-center px-6 py-4 bg-rose-50 rounded-2xl border border-rose-100">
+                    <div class="text-3xl font-bold text-rose-500">{{ predictions.ensemble.votes.high }}</div>
+                    <div class="text-sm text-gray-500 mt-1">High severity votes</div>
                 </div>
             </div>
 
@@ -66,10 +72,12 @@
                     <div class="text-3xl mb-3" aria-hidden="true">🧠</div>
                     <h3 class="font-semibold text-gray-900 mb-2">VGG16</h3>
                     <div class="text-lg font-bold mb-3 
-                        {% if model.prediction|lower == 'benign' %}
-                            text-teal-500
+                        {% if model.severity_level == 'high' %}
+                            text-rose-500
+                        {% elif model.severity_level == 'moderate' %}
+                            text-amber-500
                         {% else %}
-                            text-pink-500
+                            text-emerald-500
                         {% endif %}">
                         {{ model.prediction }}
                     </div>
@@ -90,10 +98,12 @@
                     <div class="text-3xl mb-3" aria-hidden="true">⚡</div>
                     <h3 class="font-semibold text-gray-900 mb-2">ResNet50</h3>
                     <div class="text-lg font-bold mb-3 
-                        {% if model.prediction|lower == 'benign' %}
-                            text-teal-500
+                        {% if model.severity_level == 'high' %}
+                            text-rose-500
+                        {% elif model.severity_level == 'moderate' %}
+                            text-amber-500
                         {% else %}
-                            text-pink-500
+                            text-emerald-500
                         {% endif %}">
                         {{ model.prediction }}
                     </div>
@@ -114,10 +124,12 @@
                     <div class="text-3xl mb-3" aria-hidden="true">🚀</div>
                     <h3 class="font-semibold text-gray-900 mb-2">EfficientNet</h3>
                     <div class="text-lg font-bold mb-3 
-                        {% if model.prediction|lower == 'benign' %}
-                            text-teal-500
+                        {% if model.severity_level == 'high' %}
+                            text-rose-500
+                        {% elif model.severity_level == 'moderate' %}
+                            text-amber-500
                         {% else %}
-                            text-pink-500
+                            text-emerald-500
                         {% endif %}">
                         {{ model.prediction }}
                     </div>

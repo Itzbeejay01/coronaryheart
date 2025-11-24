@@ -23,8 +23,7 @@
                 Upload Medical Images
             </h1>
             <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Drag-and-drop JPG, JPEG, or PNG images. ArteriAI cleans, enhances, and
-                prepares each image for downstream ensemble diagnosis.
+                Drag-and-drop coronary angiography images in PNG or JPEG format. ArteriAI handles DICOM conversions behind the scenes and prepares every frame for downstream ensemble diagnosis.
             </p>
         </div>
 
@@ -64,10 +63,8 @@
                             </div>
                             
                             <!-- Floating Icons -->
-                            <div class="absolute top-4 left-4 w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">JPG</div>
-                            <div class="absolute top-4 right-4 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">PNG</div>
-                            <div class="absolute bottom-4 left-4 w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">JPEG</div>
-                            <div class="absolute bottom-4 right-4 w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">IMG</div>
+                            <div class="absolute top-4 left-4 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">PNG</div>
+                            <div class="absolute bottom-4 right-4 w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">JPEG</div>
 
                             <!-- Main Content -->
                             <div class="relative z-10">
@@ -78,11 +75,10 @@
                                     Drop images or click to browse
                                 </p>
                                 <p class="text-gray-500 group-hover:text-gray-600 transition-colors">
-                                    Accepted formats: <span id="acceptedFormats" class="font-semibold text-blue-600">.jpg, .jpeg, .png</span>
-                                    · directories supported
+                                    Accepted formats: <span id="acceptedFormats" class="font-semibold text-blue-600">.jpeg /.jpg · .png</span>
+                                    · drag in folders for batch uploads
                                 </p>
                                 <div class="mt-4 flex justify-center space-x-2">
-                                    <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">JPG</span>
                                     <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">JPEG</span>
                                     <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">PNG</span>
                                 </div>

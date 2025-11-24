@@ -15,12 +15,41 @@ import pydicom
 import cv2
 import numpy as np
 from skimage.metrics import structural_similarity as ssim
+from collections import Counter
 
 # Import the new form and the prediction function
 
 
 # Global storage for processing progress
 processing_status = {}
+
+SEVERITY_THRESHOLDS = {
+    'low': 0.34,
+    'moderate': 0.67,
+}
+
+
+def classify_severity(probability: float):
+    """
+    Map a probability (0-1) to a qualitative severity label and key.
+    """
+    if probability < SEVERITY_THRESHOLDS['low']:
+        return "Low Severity", "low"
+    if probability < SEVERITY_THRESHOLDS['moderate']:
+        return "Moderate Severity", "moderate"
+    return "High Severity", "high"
+
+
+def infer_jpeg_image_type(filename: str) -> str:
+    """
+    Determine image type from the file extension so we can track PNG vs JPEG uploads.
+    """
+    extension = os.path.splitext(filename.lower())[1]
+    if extension == '.png':
+        return 'png'
+    if extension in {'.jpg', '.jpeg'}:
+        return 'jpeg'
+    return 'other'
 
 def update_progress(image_id, step, progress):
     """Update processing progress for an image"""
@@ -205,12 +234,8 @@ def upload(request):
                 try:
                     logging.info(f"Processing JPEG file: {jpeg_file.name}")
                     
-                    # Determine image type based on filename or path
-                    image_type = 'other'
-                    if 'cbis-ddsm' in jpeg_file.name.lower():
-                        image_type = 'cbis-ddsm'
-                    elif 'mri' in jpeg_file.name.lower():
-                        image_type = 'mri'
+                    # Determine image type from file extension (PNG vs JPEG)
+                    image_type = infer_jpeg_image_type(jpeg_file.name)
                     
                     # Save the JPEG file
                     jpeg_image = JpegImage.objects.create(
@@ -1225,39 +1250,42 @@ def predict_diagnosis_view(request):
                 ensemble_pred = 1 if votes >= 2 else 0
                 ensemble_prob = (vgg16_pred_prob + resnet50_pred_prob + efficientnet_pred_prob) / 3
                 
-                # --- NEW CONFIDENCE CALCULATION ---
                 def get_confidence(prob, pred):
                     return prob if pred == 1 else 1 - prob
 
-                vgg16_conf = get_confidence(vgg16_pred_prob, vgg16_pred)
-                resnet50_conf = get_confidence(resnet50_pred_prob, resnet50_pred)
-                efficientnet_conf = get_confidence(efficientnet_pred_prob, efficientnet_pred)
-                ensemble_conf = get_confidence(ensemble_prob, ensemble_pred)
+                severity_votes = Counter()
 
-                # Prepare results, multiplying by 100 for display
+                def build_model_result(probability_value, binary_prediction):
+                    label, level = classify_severity(float(probability_value))
+                    severity_votes[level] += 1
+                    confidence = get_confidence(probability_value, binary_prediction)
+                    return {
+                        'prediction': label,
+                        'severity_level': level,
+                        'probability': float(probability_value) * 100,
+                        'confidence': float(confidence) * 100
+                    }
+
+                vgg16_result = build_model_result(vgg16_pred_prob, vgg16_pred)
+                resnet50_result = build_model_result(resnet50_pred_prob, resnet50_pred)
+                efficientnet_result = build_model_result(efficientnet_pred_prob, efficientnet_pred)
+
+                ensemble_conf = get_confidence(ensemble_prob, ensemble_pred)
+                ensemble_label, ensemble_level = classify_severity(float(ensemble_prob))
+                
                 predictions = {
-                    'vgg16': {
-                        'prediction': 'Malignant' if vgg16_pred == 1 else 'Benign',
-                        'probability': float(vgg16_pred_prob) * 100,
-                        'confidence': float(vgg16_conf) * 100
-                    },
-                    'resnet50': {
-                        'prediction': 'Malignant' if resnet50_pred == 1 else 'Benign',
-                        'probability': float(resnet50_pred_prob) * 100,
-                        'confidence': float(resnet50_conf) * 100
-                    },
-                    'efficientnet': {
-                        'prediction': 'Malignant' if efficientnet_pred == 1 else 'Benign',
-                        'probability': float(efficientnet_pred_prob) * 100,
-                        'confidence': float(efficientnet_conf) * 100
-                    },
+                    'vgg16': vgg16_result,
+                    'resnet50': resnet50_result,
+                    'efficientnet': efficientnet_result,
                     'ensemble': {
-                        'prediction': 'Malignant' if ensemble_pred == 1 else 'Benign',
+                        'prediction': ensemble_label,
+                        'severity_level': ensemble_level,
                         'probability': float(ensemble_prob) * 100,
                         'confidence': float(ensemble_conf) * 100,
                         'votes': {
-                            'malignant_votes': votes,
-                            'benign_votes': 3 - votes
+                            'low': severity_votes.get('low', 0),
+                            'moderate': severity_votes.get('moderate', 0),
+                            'high': severity_votes.get('high', 0)
                         }
                     },
                     'timestamp': datetime.now().isoformat(),

@@ -40,14 +40,14 @@ class DicomImage(BaseImage):
 
 class JpegImage(BaseImage):
     IMAGE_TYPE_CHOICES = [
-        ('cbis-ddsm', 'CBIS-DDSM'),
-        ('mri', 'MRI'),
-        ('other', 'Other')
+        ('jpeg', 'JPEG Coronary Image'),
+        ('png', 'PNG Coronary Image'),
+        ('other', 'Other Coronary Image')
     ]
     
     image_file = models.ImageField(upload_to='uploads/jpeg/')
     visualization_image = models.ImageField(upload_to='uploads/jpeg/preview/', null=True, blank=True)
-    image_type = models.CharField(max_length=20, choices=IMAGE_TYPE_CHOICES, default='other')
+    image_type = models.CharField(max_length=20, choices=IMAGE_TYPE_CHOICES, default='jpeg')
     metadata = models.JSONField(default=dict)
     
     def filename(self):
