@@ -108,3 +108,9 @@ debug.log
 # Exclude backup and system files
 .DS_Store
 Thumbs.db 
+# Large data files
+data.zip
+*.csv
+*.pdf
+package-lock.json
+package.json
