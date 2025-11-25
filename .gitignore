@@ -7,6 +7,12 @@ val_metrics.csv
 test_metrics.csv
 Chapter 3 and 4.pdf
 
+echo "data.zip" >> .gitignore
+echo "*.csv" >> .gitignore  
+echo "*.pdf" >> .gitignore
+echo "package-lock.json" >> .gitignore
+echo "package.json" >> .gitignore
+
 # Package files
 package-lock.json
 package.json
