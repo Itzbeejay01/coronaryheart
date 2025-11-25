@@ -4,120 +4,99 @@
 {% block title %}ArteriAI · Coronary Imaging Intelligence{% endblock %}
 
 {% block content %}
-<section class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 py-12 px-4 sm:px-6 lg:px-8">
-    <!-- Animated Background Elements -->
-    <div class="fixed inset-0 -z-10 overflow-hidden">
-        <div class="absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-32 w-80 h-80 bg-gradient-to-r from-emerald-400/10 to-cyan-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-400/5 to-pink-400/5 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="max-w-4xl mx-auto relative">
-        <!-- Header Section -->
-        <div class="text-center mb-12">
-            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-500/10 text-blue-700 border border-blue-200/50 backdrop-blur-sm mb-6">
-                <span class="mr-2 animate-pulse" aria-hidden="true">📡</span>
-                Batch-Ready Image Preprocessing
-            </span>
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-gray-900 to-blue-900 bg-clip-text text-transparent">
-                Upload Medical Images
-            </h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Drag-and-drop coronary angiography images in PNG or JPEG format. ArteriAI handles DICOM conversions behind the scenes and prepares every frame for downstream ensemble diagnosis.
-            </p>
-        </div>
-
-        <!-- Navigation Menu -->
-        <nav class="flex justify-center space-x-3 mb-12" aria-label="Workflow shortcuts">
-            <a href="{% url 'index' %}" class="group px-6 py-3 rounded-2xl text-sm font-semibold text-gray-600 hover:text-gray-900 bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/50 hover:shadow-lg transition-all duration-300">
-                <span class="group-hover:scale-110 transition-transform">🏠</span>
-                <span class="ml-2">Home</span>
-            </a>
-            <a href="{% url 'upload' %}" class="group px-6 py-3 rounded-2xl text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                <span class="group-hover:rotate-12 transition-transform">🔍</span>
-                <span class="ml-2">Image Analysis</span>
-            </a>
-            <a href="{% url 'predict_diagnosis' %}" class="group px-6 py-3 rounded-2xl text-sm font-semibold text-gray-600 hover:text-gray-900 bg-white/50 backdrop-blur-sm border border-gray-200/50 hover:border-gray-300/50 hover:shadow-lg transition-all duration-300">
-                <span class="group-hover:scale-110 transition-transform">🧪</span>
-                <span class="ml-2">Predict Diagnosis</span>
-            </a>
-        </nav>
-
-        <!-- Upload Card -->
-        <div class="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 transform transition-all duration-300 hover:shadow-3xl">
-            <div class="p-8">
-                <form id="uploadForm" method="post" enctype="multipart/form-data">
+<section class="px-4 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-6xl space-y-12">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div class="space-y-6">
+                <span class="ai-badge">
+                    <span class="text-base" aria-hidden="true">🫀</span>
+                    Coronary Upload Lab
+                </span>
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                        <span class="ai-gradient">AI-ready coronary imaging</span> pipeline
+                    </h1>
+                    <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+                        Drag in PNG or JPEG angiography frames. ArteriAI harmonizes naming, calibrates contrast, and stages each file for severity analysis—DICOM studies are auto-converted in the background.
+                    </p>
+                </div>
+                <div class="ai-stats">
+                    <div class="ai-stat-card">
+                        <p class="ai-stat-label">Accepted formats</p>
+                        <p class="ai-stat-value">PNG · JPEG</p>
+                        <p class="text-xs text-slate-500 mt-1">DICOM fallback supported</p>
+                    </div>
+                    <div class="ai-stat-card">
+                        <p class="ai-stat-label">Avg. prep time</p>
+                        <p class="ai-stat-value">&lt; 30s</p>
+                        <p class="text-xs text-slate-500 mt-1">per batch on-device</p>
+                    </div>
+                    <div class="ai-stat-card">
+                        <p class="ai-stat-label">Enhancement stages</p>
+                        <p class="ai-stat-value">3-layer</p>
+                        <p class="text-xs text-slate-500 mt-1">denoise · CLAHE · sharpen</p>
+                    </div>
+                </div>
+                <div class="ai-chip-group">
+                    <span class="ai-chip">Auto directory ingestion</span>
+                    <span class="ai-chip">HIPAA-safe temp storage</span>
+                    <span class="ai-chip">AI quality scoring</span>
+                </div>
+            </div>
+            <div class="ai-card ai-card--soft p-8 shadow-2xl shadow-indigo-200/60">
+                <div class="mb-8">
+                    <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Upload workspace</p>
+                    <h2 class="text-2xl font-semibold text-slate-900">Batch coronary uploads</h2>
+                    <p class="text-sm text-slate-500 mt-2">Drag folders or choose files to queue them for preprocessing.</p>
+                </div>
+                <form id="uploadForm" method="post" enctype="multipart/form-data" class="space-y-6">
                     {% csrf_token %}
                     <input type="hidden" name="dataset_type" id="datasetType" value="images" />
-
-                    <!-- Dropzone -->
-                    <div class="relative mb-6">
-                        <div class="dropzone border-3 border-dashed border-gray-300/80 rounded-3xl p-12 text-center cursor-pointer transition-all duration-500 hover:border-blue-400/80 hover:bg-blue-50/30 relative overflow-hidden group" id="dropzone">
-                            <!-- Animated Grid Background -->
-                            <div class="absolute inset-0 opacity-[0.03] pointer-events-none" aria-hidden="true">
-                                <div class="grid grid-cols-12 gap-4 h-full transform group-hover:scale-105 transition-transform duration-1000">
-                                    {% for i in "123456789012" %}
-                                    <div class="bg-blue-500 rounded-lg animate-pulse" style="animation-delay: {{ forloop.counter0 }}00ms"></div>
-                                    {% endfor %}
-                                </div>
+                    <div class="ai-grid rounded-3xl border border-dashed border-indigo-200/80 bg-gradient-to-b from-white/90 to-indigo-50/40 p-10 text-center cursor-pointer transition hover:border-indigo-400" id="dropzone">
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-3xl text-white shadow-lg">
+                                📤
                             </div>
-                            
-                            <!-- Floating Icons -->
-                            <div class="absolute top-4 left-4 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">PNG</div>
-                            <div class="absolute bottom-4 right-4 w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-500">JPEG</div>
-
-                            <!-- Main Content -->
-                            <div class="relative z-10">
-                                <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
-                                    <span class="text-3xl text-white">📤</span>
-                                </div>
-                                <p class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-gray-900 transition-colors">
-                                    Drop images or click to browse
+                            <div>
+                                <p class="text-2xl font-semibold text-slate-900">Drop files or browse</p>
+                                <p class="text-sm text-slate-500 mt-2">
+                                    Accepted formats: <span id="acceptedFormats" class="font-semibold text-indigo-600">.jpeg / .jpg · .png</span> · drag directories for batch ingest
                                 </p>
-                                <p class="text-gray-500 group-hover:text-gray-600 transition-colors">
-                                    Accepted formats: <span id="acceptedFormats" class="font-semibold text-blue-600">.jpeg /.jpg · .png</span>
-                                    · drag in folders for batch uploads
-                                </p>
-                                <div class="mt-4 flex justify-center space-x-2">
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">JPEG</span>
-                                    <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">PNG</span>
-                                </div>
                             </div>
-                            <input
-                                type="file"
-                                id="fileInput"
-                                name="jpeg_files"
-                                multiple
-                                webkitdirectory
-                                directory
-                                accept=".jpg,.jpeg,.png"
-                                class="hidden"
-                            />
+                            <div class="flex gap-2 flex-wrap justify-center text-xs font-semibold">
+                                <span class="ai-pill bg-indigo-50 text-indigo-600 border border-indigo-200">PNG</span>
+                                <span class="ai-pill bg-pink-50 text-pink-600 border border-pink-200">JPEG</span>
+                            </div>
                         </div>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            name="jpeg_files"
+                            multiple
+                            webkitdirectory
+                            directory
+                            accept=".jpg,.jpeg,.png"
+                            class="hidden"
+                        />
                     </div>
-
-                    <!-- File List -->
-                    <div class="file-list mb-6 space-y-3 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-transparent" id="fileList" aria-live="polite"></div>
-                    
-                    <!-- Error Message -->
-                    <div class="error-message mb-4" id="errorMessage"></div>
-
-                    <!-- Process Button -->
+                    <div class="file-list space-y-3 max-h-64 overflow-y-auto rounded-2xl border border-slate-200/70 bg-white/70 p-4 shadow-inner shadow-slate-200" id="fileList" aria-live="polite"></div>
+                    <div class="error-message" id="errorMessage"></div>
                     <button
                         type="submit"
-                        class="w-full group relative py-4 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg overflow-hidden"
+                        class="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-fuchsia-500 py-4 text-white font-semibold shadow-lg shadow-indigo-400/40 transition hover:translate-y-[-1px] disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none"
                         id="processButton"
                         disabled
                     >
-                        <span class="relative z-10 flex items-center justify-center">
-                            <span class="mr-3 text-xl group-hover:scale-110 transition-transform">⚡</span>
-                            Process Images
-                            <span class="ml-2 text-sm opacity-90">(</span>
+                        <span class="relative z-10 flex items-center justify-center text-lg">
+                            <span class="mr-3 text-xl" aria-hidden="true">⚡</span>
+                            Process batch
+                            <span class="ml-2 text-sm opacity-80">(</span>
                             <span id="fileCount" class="mx-1 text-sm opacity-90">0</span>
-                            <span class="text-sm opacity-90">files)</span>
+                            <span class="text-sm opacity-80">files)</span>
                         </span>
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+                        <div class="absolute inset-0 opacity-0 transition group-hover:opacity-20 bg-white"></div>
                     </button>
+                    <p class="text-xs text-slate-500 text-center">Files are stored temporarily during enhancement and deleted after processing.</p>
                 </form>
             </div>
         </div>
