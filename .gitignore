@@ -1,3 +1,19 @@
+# Large data files that should NEVER be committed
+data.zip
+*.csv
+*.pdf
+train_metrics.csv
+val_metrics.csv  
+test_metrics.csv
+Chapter 3 and 4.pdf
+
+# Package files
+package-lock.json
+package.json
+
+# Large static assets (consider using Git LFS for these if needed)
+# preprocessing_app/static/IBLogo.png
+# preprocessing_app/static/preprocessing_app/images/@IBLogo.png
 # Django
 *.log
 *.pot
