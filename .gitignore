@@ -74,6 +74,7 @@ recall_sensitivity_results/
 soft_ensemble_results/
 extracted_features_direct/
 /models
+/data.zip
 
 # Exclude processed and uploaded media
 /media/
