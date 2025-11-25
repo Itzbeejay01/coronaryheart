@@ -4,197 +4,173 @@
 {% block title %}Diagnosis Report · ArteriAI{% endblock %}
 
 {% block content %}
-<section class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8 flex justify-center">
-    <div class="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/50 max-w-4xl w-full" id="reportContent">
-        <!-- Header Section -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Severity assessment</h1>
-            <p class="text-gray-600">Ensemble AI analysis report</p>
+<section class="ai-page px-4 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-5xl w-full" id="reportContent">
+        <div class="ai-card ai-card--soft p-8 md:p-10 space-y-10">
+            <div class="text-center space-y-3">
+                <p class="text-sm uppercase tracking-[0.3em] text-slate-400">ArteriAI • Ensemble severity dossier</p>
+                <h1 class="text-3xl font-bold text-slate-900">Severity assessment</h1>
+                <p class="text-slate-500">Coronary AI intelligence summary</p>
+            </div>
+
+            {% if predictions %}
+                {% with ensemble=predictions.ensemble %}
+                <div class="space-y-6">
+                    <div class="text-center space-y-3">
+                        <div class="inline-flex items-center px-6 py-3 rounded-full text-lg font-semibold shadow-md
+                            {% if ensemble.severity_level == 'high' %}
+                                bg-gradient-to-r from-rose-500 to-orange-400 text-white
+                            {% elif ensemble.severity_level == 'moderate' %}
+                                bg-gradient-to-r from-amber-300 to-yellow-400 text-amber-900
+                            {% else %}
+                                bg-gradient-to-r from-emerald-300 to-teal-400 text-emerald-900
+                            {% endif %}">
+                            {{ ensemble.prediction }}
+                        </div>
+                        <p class="text-sm text-slate-500 uppercase tracking-[0.4em]">Final ensemble severity</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="w-full h-4 rounded-full bg-slate-100 overflow-hidden">
+                            <div 
+                                class="h-full rounded-full bg-gradient-to-r from-indigo-500 via-blue-500 to-fuchsia-500 transition-all"
+                                style="width: {{ ensemble.confidence|floatformat:2 }}%"
+                            ></div>
+                        </div>
+                        <div class="flex justify-between text-sm text-slate-500">
+                            <span>{{ ensemble.confidence|floatformat:1 }}% confidence</span>
+                            <span>Risk score {{ ensemble.probability|floatformat:2 }}%</span>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+
+                <div class="grid gap-4 md:grid-cols-3">
+                    <div class="ai-stat-card text-center">
+                        <p class="ai-stat-label">Low severity votes</p>
+                        <p class="ai-stat-value text-emerald-500">{{ predictions.ensemble.votes.low }}</p>
+                    </div>
+                    <div class="ai-stat-card text-center">
+                        <p class="ai-stat-label">Moderate severity votes</p>
+                        <p class="ai-stat-value text-amber-500">{{ predictions.ensemble.votes.moderate }}</p>
+                    </div>
+                    <div class="ai-stat-card text-center">
+                        <p class="ai-stat-label">High severity votes</p>
+                        <p class="ai-stat-value text-rose-500">{{ predictions.ensemble.votes.high }}</p>
+                    </div>
+                </div>
+
+                <div class="ai-divider"></div>
+
+                <div class="grid gap-6 md:grid-cols-3">
+                    {% with predictions.vgg16 as model %}
+                    <div class="ai-card ai-card--outline p-6 text-center space-y-3">
+                        <div class="text-3xl" aria-hidden="true">🧠</div>
+                        <h3 class="font-semibold text-slate-900">VGG16</h3>
+                        <p class="text-lg font-bold
+                            {% if model.severity_level == 'high' %}
+                                text-rose-500
+                            {% elif model.severity_level == 'moderate' %}
+                                text-amber-500
+                            {% else %}
+                                text-emerald-500
+                            {% endif %}">
+                            {{ model.prediction }}
+                        </p>
+                        <div class="w-full h-2 rounded-full bg-slate-100">
+                            <div class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500" style="width: {{ model.confidence|floatformat:2 }}%"></div>
+                        </div>
+                        <p class="text-sm text-slate-500">Probability {{ model.probability|floatformat:1 }}%</p>
+                    </div>
+                    {% endwith %}
+
+                    {% with predictions.resnet50 as model %}
+                    <div class="ai-card ai-card--outline p-6 text-center space-y-3">
+                        <div class="text-3xl" aria-hidden="true">⚡</div>
+                        <h3 class="font-semibold text-slate-900">ResNet50</h3>
+                        <p class="text-lg font-bold
+                            {% if model.severity_level == 'high' %}
+                                text-rose-500
+                            {% elif model.severity_level == 'moderate' %}
+                                text-amber-500
+                            {% else %}
+                                text-emerald-500
+                            {% endif %}">
+                            {{ model.prediction }}
+                        </p>
+                        <div class="w-full h-2 rounded-full bg-slate-100">
+                            <div class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500" style="width: {{ model.confidence|floatformat:2 }}%"></div>
+                        </div>
+                        <p class="text-sm text-slate-500">Probability {{ model.probability|floatformat:1 }}%</p>
+                    </div>
+                    {% endwith %}
+
+                    {% with predictions.efficientnet as model %}
+                    <div class="ai-card ai-card--outline p-6 text-center space-y-3">
+                        <div class="text-3xl" aria-hidden="true">🚀</div>
+                        <h3 class="font-semibold text-slate-900">EfficientNet</h3>
+                        <p class="text-lg font-bold
+                            {% if model.severity_level == 'high' %}
+                                text-rose-500
+                            {% elif model.severity_level == 'moderate' %}
+                                text-amber-500
+                            {% else %}
+                                text-emerald-500
+                            {% endif %}">
+                            {{ model.prediction }}
+                        </p>
+                        <div class="w-full h-2 rounded-full bg-slate-100">
+                            <div class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500" style="width: {{ model.confidence|floatformat:2 }}%"></div>
+                        </div>
+                        <p class="text-sm text-slate-500">Probability {{ model.probability|floatformat:1 }}%</p>
+                    </div>
+                    {% endwith %}
+                </div>
+
+                <div class="ai-divider"></div>
+
+                <div class="text-center text-slate-500">
+                    <p>Analysis completed: {{ predictions.timestamp|date:"F j, Y, g:i A" }}</p>
+                    <p>Image evaluated: {{ predictions.image_name }}</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <button 
+                        type="button" 
+                        onclick="saveReport()" 
+                        class="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 text-slate-700 hover:bg-slate-50"
+                    >
+                        <span class="mr-2" aria-hidden="true">💾</span>
+                        Save report
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="printReport()" 
+                        class="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 text-slate-700 hover:bg-slate-50"
+                    >
+                        <span class="mr-2" aria-hidden="true">🖨️</span>
+                        Print report
+                    </button>
+                    <a 
+                        href="{% url 'predict_diagnosis' %}" 
+                        class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 px-5 py-3 text-white shadow-lg shadow-indigo-300/40"
+                    >
+                        <span class="mr-2" aria-hidden="true">🔄</span>
+                        New analysis
+                    </a>
+                </div>
+            {% else %}
+                <div class="text-center space-y-4 py-12">
+                    <h2 class="text-2xl font-bold text-slate-900">No prediction data</h2>
+                    <p class="text-slate-500 max-w-md mx-auto">We could not find stored predictions. Launch a new analysis to generate a report.</p>
+                    <a 
+                        href="{% url 'predict_diagnosis' %}" 
+                        class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-3 text-white shadow-lg shadow-indigo-300/40"
+                    >
+                        Return to predictor
+                    </a>
+                </div>
+            {% endif %}
         </div>
-
-        {% if predictions %}
-            {% with ensemble=predictions.ensemble %}
-            <!-- Ensemble Result -->
-            <div class="text-center mb-8">
-                <!-- Result Badge -->
-                <div class="inline-flex items-center px-6 py-3 rounded-full text-lg font-bold mb-4 
-                    {% if ensemble.severity_level == 'high' %}
-                        bg-gradient-to-r from-rose-500 to-orange-400 text-rose-950
-                    {% elif ensemble.severity_level == 'moderate' %}
-                        bg-gradient-to-r from-amber-300 to-yellow-400 text-amber-900
-                    {% else %}
-                        bg-gradient-to-r from-emerald-300 to-teal-400 text-emerald-900
-                    {% endif %}">
-                    {{ ensemble.prediction }}
-                </div>
-                
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Final ensemble severity</h2>
-                
-                <!-- Confidence Meter -->
-                <div class="max-w-md mx-auto mb-2">
-                    <div class="w-full bg-gray-200 rounded-full h-4 mb-2 relative">
-                        <div 
-                            class="h-4 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
-                            style="width: {{ ensemble.confidence|floatformat:2 }}%"
-                        ></div>
-                    </div>
-                    <div class="text-sm font-medium text-gray-700">
-                        {{ ensemble.confidence|floatformat:1 }}% confidence
-                    </div>
-                </div>
-                
-                <p class="text-gray-600">
-                    Weighted risk score: {{ ensemble.probability|floatformat:2 }}%
-                </p>
-            </div>
-            {% endwith %}
-
-            <!-- Severity Vote Display -->
-            <div class="flex flex-col md:flex-row justify-center gap-6 mb-8">
-                <div class="text-center px-6 py-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                    <div class="text-3xl font-bold text-emerald-500">{{ predictions.ensemble.votes.low }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Low severity votes</div>
-                </div>
-                <div class="text-center px-6 py-4 bg-amber-50 rounded-2xl border border-amber-100">
-                    <div class="text-3xl font-bold text-amber-500">{{ predictions.ensemble.votes.moderate }}</div>
-                    <div class="text-sm text-gray-500 mt-1">Moderate severity votes</div>
-                </div>
-                <div class="text-center px-6 py-4 bg-rose-50 rounded-2xl border border-rose-100">
-                    <div class="text-3xl font-bold text-rose-500">{{ predictions.ensemble.votes.high }}</div>
-                    <div class="text-sm text-gray-500 mt-1">High severity votes</div>
-                </div>
-            </div>
-
-            <!-- Model Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                {% with predictions.vgg16 as model %}
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
-                    <div class="text-3xl mb-3" aria-hidden="true">🧠</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">VGG16</h3>
-                    <div class="text-lg font-bold mb-3 
-                        {% if model.severity_level == 'high' %}
-                            text-rose-500
-                        {% elif model.severity_level == 'moderate' %}
-                            text-amber-500
-                        {% else %}
-                            text-emerald-500
-                        {% endif %}">
-                        {{ model.prediction }}
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div 
-                            class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
-                            style="width: {{ model.confidence|floatformat:2 }}%"
-                        ></div>
-                    </div>
-                    <p class="text-sm text-gray-600">
-                        Probability: {{ model.probability|floatformat:1 }}%
-                    </p>
-                </div>
-                {% endwith %}
-
-                {% with predictions.resnet50 as model %}
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
-                    <div class="text-3xl mb-3" aria-hidden="true">⚡</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">ResNet50</h3>
-                    <div class="text-lg font-bold mb-3 
-                        {% if model.severity_level == 'high' %}
-                            text-rose-500
-                        {% elif model.severity_level == 'moderate' %}
-                            text-amber-500
-                        {% else %}
-                            text-emerald-500
-                        {% endif %}">
-                        {{ model.prediction }}
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div 
-                            class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
-                            style="width: {{ model.confidence|floatformat:2 }}%"
-                        ></div>
-                    </div>
-                    <p class="text-sm text-gray-600">
-                        Probability: {{ model.probability|floatformat:1 }}%
-                    </p>
-                </div>
-                {% endwith %}
-
-                {% with predictions.efficientnet as model %}
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
-                    <div class="text-3xl mb-3" aria-hidden="true">🚀</div>
-                    <h3 class="font-semibold text-gray-900 mb-2">EfficientNet</h3>
-                    <div class="text-lg font-bold mb-3 
-                        {% if model.severity_level == 'high' %}
-                            text-rose-500
-                        {% elif model.severity_level == 'moderate' %}
-                            text-amber-500
-                        {% else %}
-                            text-emerald-500
-                        {% endif %}">
-                        {{ model.prediction }}
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div 
-                            class="h-2 rounded-full bg-gradient-to-r from-blue-600 to-pink-500 transition-all duration-500"
-                            style="width: {{ model.confidence|floatformat:2 }}%"
-                        ></div>
-                    </div>
-                    <p class="text-sm text-gray-600">
-                        Probability: {{ model.probability|floatformat:1 }}%
-                    </p>
-                </div>
-                {% endwith %}
-            </div>
-
-            <!-- Timestamp -->
-            <div class="text-center text-gray-600 mb-8">
-                <p>
-                    Analysis completed: {{ predictions.timestamp|date:"F j, Y, g:i A" }}<br>
-                    Image evaluated: {{ predictions.image_name }}
-                </p>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
-                <button 
-                    type="button" 
-                    onclick="saveReport()" 
-                    class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-                >
-                    <span class="mr-2" aria-hidden="true">💾</span>
-                    Save report
-                </button>
-                <button 
-                    type="button" 
-                    onclick="printReport()" 
-                    class="inline-flex items-center justify-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
-                >
-                    <span class="mr-2" aria-hidden="true">🖨️</span>
-                    Print report
-                </button>
-                <a 
-                    href="{% url 'predict_diagnosis' %}" 
-                    class="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors text-center"
-                >
-                    <span class="mr-2" aria-hidden="true">🔄</span>
-                    New analysis
-                </a>
-            </div>
-        {% else %}
-            <!-- Empty State -->
-            <div class="text-center py-12 px-4">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">No prediction data</h2>
-                <p class="text-gray-600 mb-6 max-w-md mx-auto">
-                    We couldn't find stored predictions. Launch a new analysis to generate a report.
-                </p>
-                <a 
-                    href="{% url 'predict_diagnosis' %}" 
-                    class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-                >
-                    Return to predictor
-                </a>
-            </div>
-        {% endif %}
     </div>
 </section>
 

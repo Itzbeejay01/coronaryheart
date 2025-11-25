@@ -4,188 +4,115 @@
 {% block title %}Predict Diagnosis · ArteriAI{% endblock %}
 
 {% block content %}
-<section class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-100/30 to-indigo-100/20 py-12 px-4 sm:px-6 lg:px-8">
-    <!-- Animated Background Elements -->
-    <div class="fixed inset-0 -z-10 overflow-hidden">
-        <div class="absolute -top-40 -right-32 w-80 h-80 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-32 w-80 h-80 bg-gradient-to-r from-emerald-400/10 to-cyan-400/10 rounded-full blur-3xl"></div>
-    </div>
-
-    <div class="relative">
-        <!-- Main Content Card -->
-        <div class="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 max-w-4xl mx-auto transform transition-all duration-300 hover:shadow-3xl">
-            <!-- Header Section with Gradient -->
-            <div class="relative bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-3xl p-8 text-white overflow-hidden">
-                <div class="absolute inset-0 bg-black/10"></div>
-                <div class="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full"></div>
-                <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-white/10 rounded-full"></div>
-                
-                <div class="relative z-10 text-center">
-                    <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-white/20 backdrop-blur-sm border border-white/30 mb-4">
-                        <span class="mr-2 animate-pulse" aria-hidden="true">🧪</span>
-                        Ensemble Inference Workspace
-                    </span>
-                    <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                        Predict Diagnosis
-                    </h1>
-                    <p class="text-blue-100 text-lg max-w-2xl mx-auto leading-relaxed">
-                        Choose a preprocessed image to run through our advanced ensemble of VGG16, ResNet50, and EfficientNet models. 
-                        Receive a low, moderate, or high severity assessment along with per-model risk scores and ensemble confidence.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Content Area -->
-            <div class="p-8">
-                <!-- Error Message -->
-                {% if error %}
-                <div class="mb-8 animate-fade-in">
-                    <div class="bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-2xl p-6 shadow-lg" role="alert">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <div class="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
-                                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-sm font-semibold text-red-800">Analysis Error</h3>
-                                <div class="mt-1 text-sm text-red-700">
-                                    <p>{{ error }}</p>
-                                </div>
-                            </div>
-                        </div>
+<section class="px-4 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-6xl space-y-12">
+        <div class="grid gap-10 lg:grid-cols-2 lg:items-start">
+            <div class="ai-card ai-card--soft p-8 space-y-6">
+                <span class="ai-badge">
+                    <span aria-hidden="true">🧬</span>
+                    Ensemble Severity Studio
+                </span>
+                <h1 class="text-4xl font-black text-slate-900 leading-tight">
+                    Predict coronary <span class="ai-gradient">severity signatures</span>
+                </h1>
+                <p class="text-slate-600 text-lg leading-relaxed">
+                    Feed a preprocessed study into our VGG16 · ResNet50 · EfficientNet ensemble. Each model votes on risk, confidence is fused, and a low / moderate / high severity label is returned with full transparency.
+                </p>
+                <div class="ai-stats">
+                    <div class="ai-stat-card">
+                        <p class="ai-stat-label">Model ensemble</p>
+                        <p class="ai-stat-value">3 experts</p>
+                        <p class="text-xs text-slate-500 mt-1">weighted confidence</p>
+                    </div>
+                    <div class="ai-stat-card">
+                        <p class="ai-stat-label">Output</p>
+                        <p class="ai-stat-value">Severity tiers</p>
+                        <p class="text-xs text-slate-500 mt-1">+ risk probability</p>
                     </div>
                 </div>
-                {% endif %}
-
-                <!-- Prediction Form -->
-                <form method="post" enctype="multipart/form-data" id="predictionForm" class="mb-8">
-                    {% csrf_token %}
-                    
-                    <!-- Selection Card -->
-                    <div class="bg-gradient-to-br from-white to-gray-50/80 rounded-2xl shadow-lg border border-gray-200/50 p-8 mb-8 transform transition-all duration-300 hover:shadow-xl">
-                        <div class="text-center mb-6">
-                            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                <span class="text-2xl text-white">📁</span>
-                            </div>
-                            <h2 class="text-2xl font-bold text-gray-900 mb-3">Select Processed Image</h2>
-                            <p class="text-gray-600 max-w-md mx-auto">
-                                Choose from your preprocessed images or 
-                                <a href="{% url 'upload' %}" class="text-blue-600 hover:text-blue-700 font-semibold transition-colors underline decoration-2 underline-offset-2">
-                                    upload new studies
-                                </a>
-                            </p>
-                        </div>
-                        
-                        <div class="max-w-lg mx-auto">
-                            <label for="selected_image" class="block text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                Available Processed Images
-                            </label>
-                            <div class="relative">
-                                <select 
-                                    name="selected_image" 
-                                    id="selected_image"
-                                    class="w-full px-4 py-3 pl-11 bg-white/80 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none cursor-pointer hover:border-gray-400"
-                                >
-                                    <option value="">Choose an image…</option>
-                                    {% for image in available_images %}
-                                    <option value="{{ image }}" {% if selected_image == image %}selected{% endif %}>
-                                        {{ image }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                                <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="text-center">
-                        <button 
-                            type="submit" 
-                            class="group relative inline-flex items-center px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg"
-                            id="submitBtn"
-                            disabled
-                        >
-                            <span class="relative flex items-center">
-                                <span class="mr-3 text-xl" aria-hidden="true">🔬</span>
-                                Analyze Image
-                                <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                                </svg>
-                            </span>
-                            <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Loading Spinner -->
-                <div 
-                    id="loadingSpinner" 
-                    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300"
-                >
-                    <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-sm w-full mx-4 text-center transform transition-all duration-300 scale-95 animate-scale-in">
-                        <!-- Animated DNA-like loader -->
-                        <div class="relative w-20 h-20 mx-auto mb-6">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-ping"></div>
-                            </div>
-                            <div class="absolute inset-0 border-4 border-blue-200 rounded-full animate-spin"></div>
-                            <div class="absolute inset-2 border-4 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
-                        </div>
-                        
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Processing Analysis</h3>
-                        <p class="text-gray-600 mb-4">Running ensemble models...</p>
-                        
-                        <!-- Progress steps -->
-                        <div class="flex justify-center space-x-2 mb-4">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
-                            <div class="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
-                        </div>
-                    </div>
+                <div class="ai-chip-group">
+                    <span class="ai-chip">Per-model reasoning</span>
+                    <span class="ai-chip">Confidence ribbons</span>
+                    <span class="ai-chip">Audit-ready logs</span>
                 </div>
-
-                <!-- Empty State -->
                 {% if not available_images %}
-                <div class="bg-gradient-to-br from-white to-blue-50/50 rounded-2xl shadow-lg border border-blue-200/50 p-12 text-center transform transition-all duration-300 hover:shadow-xl">
-                    <div class="w-20 h-20 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        <span class="text-3xl text-white">📤</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">No Images Processed Yet</h2>
-                    <p class="text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
-                        Start by uploading medical images to unlock the power of our ensemble AI analysis and get comprehensive diagnostic insights.
-                    </p>
-                    <a 
-                        href="{% url 'upload' %}" 
-                        class="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all duration-300"
-                    >
-                        <span class="mr-3 text-xl" aria-hidden="true">🚀</span>
-                        Upload First Images
-                        <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                        </svg>
+                <div class="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/40 p-6 text-slate-700">
+                    <p class="font-semibold mb-2">Need processed images?</p>
+                    <p class="text-sm">Start by uploading coronary studies so we can prepare them for inference.</p>
+                    <a href="{% url 'upload' %}" class="mt-4 inline-flex items-center text-indigo-600 font-semibold">
+                        Go to upload hub →
                     </a>
                 </div>
                 {% endif %}
             </div>
+
+            <div class="ai-card p-8 space-y-6">
+                {% if error %}
+                <div class="rounded-2xl border border-rose-200 bg-rose-50/80 p-4 text-rose-700 text-sm" role="alert">
+                    <p class="font-semibold mb-1">Analysis error</p>
+                    <p>{{ error }}</p>
+                </div>
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data" id="predictionForm" class="space-y-6">
+                    {% csrf_token %}
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Select image</p>
+                        <h2 class="text-2xl font-semibold text-slate-900 mt-2">Choose a processed frame</h2>
+                        <p class="text-sm text-slate-500 mt-1">Pick from your enhanced PNG outputs or <a href="{% url 'upload' %}" class="text-indigo-600 font-semibold hover:text-indigo-700">upload more studies</a>.</p>
+                    </div>
+                    <div class="relative">
+                        <select 
+                            name="selected_image" 
+                            id="selected_image"
+                            class="w-full appearance-none rounded-2xl border border-slate-200 bg-white/90 px-5 py-4 text-slate-900 shadow-inner shadow-slate-200 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                        >
+                            <option value="">Choose an image…</option>
+                            {% for image in available_images %}
+                            <option value="{{ image }}" {% if selected_image == image %}selected{% endif %}>
+                                {{ image }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <span class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+                            ⌄
+                        </span>
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="w-full inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-600 px-6 py-4 text-white text-lg font-semibold shadow-lg shadow-indigo-400/30 transition hover:translate-y-[-1px] focus:outline-none focus:ring-4 focus:ring-indigo-500/30 disabled:opacity-50 disabled:translate-y-0"
+                        id="submitBtn"
+                        disabled
+                    >
+                        <span class="mr-3 text-xl" aria-hidden="true">🔬</span>
+                        Analyze image
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- Loading Spinner -->
+<div 
+    id="loadingSpinner" 
+    class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300"
+>
+    <div class="ai-card ai-card--soft max-w-sm w-full mx-4 p-10 text-center animate-scale-in">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+            <div class="absolute inset-0 border-4 border-indigo-200 rounded-full animate-spin-slow"></div>
+            <div class="absolute inset-2 border-4 border-transparent border-t-indigo-500 rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-2xl">⚙️</div>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">Processing analysis</h3>
+        <p class="text-slate-500 mb-4">Running ensemble inference...</p>
+        <div class="flex justify-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-bounce"></span>
+            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-bounce" style="animation-delay: 150ms"></span>
+            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-bounce" style="animation-delay: 300ms"></span>
+        </div>
+    </div>
+</div>
 
 <style>
     @keyframes fade-in {
